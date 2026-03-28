@@ -1,50 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-// --- Theme Color Switcher ---
+// --- Dark/Light Mode Toggle ---
 
-const colorPresets = [
-  { name: "blue", primary: "217 91% 60%", ring: "217 91% 60%" },
-  { name: "green", primary: "142 71% 45%", ring: "142 71% 45%" },
-  { name: "violet", primary: "263 70% 50%", ring: "263 70% 50%" },
-  { name: "orange", primary: "25 95% 53%", ring: "25 95% 53%" },
-  { name: "rose", primary: "347 77% 50%", ring: "347 77% 50%" },
-] as const;
+function DarkModeToggle() {
+  const [isDark, setIsDark] = useState(() => {
+    return document.documentElement.classList.contains("dark");
+  });
 
-const presetColors: Record<string, string> = {
-  blue: "bg-blue-500",
-  green: "bg-green-500",
-  violet: "bg-violet-500",
-  orange: "bg-orange-500",
-  rose: "bg-rose-500",
-};
+  useEffect(() => {
+    // Default to dark mode on first load
+    if (!document.documentElement.classList.contains("dark") && !document.documentElement.classList.contains("light")) {
+      document.documentElement.classList.add("dark");
+      setIsDark(true);
+    }
+  }, []);
 
-function ThemeSwitcher() {
-  const [active, setActive] = useState("blue");
-
-  const applyTheme = (preset: (typeof colorPresets)[number]) => {
-    const root = document.documentElement;
-    root.style.setProperty("--primary", preset.primary);
-    root.style.setProperty("--ring", preset.ring);
-    setActive(preset.name);
+  const toggle = () => {
+    const next = !isDark;
+    setIsDark(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   return (
-    <div className="flex items-center gap-1.5">
-      {colorPresets.map((preset) => (
-        <button
-          key={preset.name}
-          onClick={() => applyTheme(preset)}
-          title={preset.name}
-          className={`w-5 h-5 rounded-full transition-all ${presetColors[preset.name]} ${
-            active === preset.name
-              ? "ring-2 ring-offset-2 ring-offset-background ring-foreground scale-110"
-              : "opacity-70 hover:opacity-100"
-          }`}
-          aria-label={`Switch to ${preset.name} theme`}
-        />
-      ))}
-    </div>
+    <button
+      onClick={toggle}
+      className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      {isDark ? (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+        </svg>
+      )}
+    </button>
   );
 }
 
@@ -101,8 +98,8 @@ export default function Layout() {
               </Link>
             ))}
           </nav>
-          <div className="ml-auto flex items-center gap-4">
-            <ThemeSwitcher />
+          <div className="ml-auto flex items-center gap-2">
+            <DarkModeToggle />
             <a
               href="https://github.com/fyalavuz/shadcn-standard-components"
               target="_blank"
