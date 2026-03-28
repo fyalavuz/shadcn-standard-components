@@ -1,4 +1,7 @@
+"use client";
+
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 interface PriceFilterProps {
   min?: number;
@@ -9,6 +12,7 @@ interface PriceFilterProps {
   currency?: string;
   title?: string;
   distribution?: number[];
+  className?: string;
   onChange?: (range: { min: number; max: number }) => void;
 }
 
@@ -25,7 +29,7 @@ function generateDistribution(count: number): number[] {
   return data;
 }
 
-export default function PriceFilter({
+export function PriceFilter({
   min = 0,
   max = 1000,
   step = 1,
@@ -34,6 +38,7 @@ export default function PriceFilter({
   currency = "$",
   title = "Price Range",
   distribution,
+  className,
   onChange,
 }: PriceFilterProps) {
   const [minVal, setMinVal] = useState(defaultMin);
@@ -133,9 +138,10 @@ export default function PriceFilter({
   const maxPercent = toPercent(maxVal);
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className={cn("w-full max-w-md", className)}>
       <h3 className="text-sm font-semibold text-foreground mb-4">{title}</h3>
 
+      {/* Histogram */}
       <div className="flex items-end gap-[2px] h-16 mb-1 px-0.5">
         {bars.map((height, i) => {
           const barPercent = (i / bars.length) * 100;
@@ -143,15 +149,17 @@ export default function PriceFilter({
           return (
             <div
               key={i}
-              className={`flex-1 rounded-t-sm transition-colors duration-150 ${
-                isActive ? "bg-primary" : "bg-muted-foreground/20"
-              }`}
+              className={cn(
+                "flex-1 rounded-t-sm transition-colors duration-150",
+                isActive ? "bg-primary" : "bg-muted-foreground/20",
+              )}
               style={{ height: `${height * 100}%` }}
             />
           );
         })}
       </div>
 
+      {/* Range Slider */}
       <div
         ref={trackRef}
         className="relative h-5 flex items-center cursor-pointer touch-none"
@@ -166,12 +174,15 @@ export default function PriceFilter({
             width: `${maxPercent - minPercent}%`,
           }}
         />
+
+        {/* Min thumb */}
         <div
-          className={`absolute w-5 h-5 rounded-full border-2 border-primary bg-background shadow-sm cursor-grab -translate-x-1/2 transition-shadow ${
+          className={cn(
+            "absolute w-5 h-5 rounded-full border-2 border-primary bg-background shadow-sm cursor-grab -translate-x-1/2 transition-shadow",
             dragging === "min"
-              ? "ring-2 ring-primary/30 cursor-grabbing scale-110"
-              : "hover:ring-2 hover:ring-primary/20"
-          }`}
+              ? "ring-2 ring-ring/30 cursor-grabbing scale-110"
+              : "hover:ring-2 hover:ring-ring/20",
+          )}
           style={{ left: `${minPercent}%` }}
           onPointerDown={handlePointerDown("min")}
           role="slider"
@@ -181,12 +192,15 @@ export default function PriceFilter({
           aria-valuenow={minVal}
           tabIndex={0}
         />
+
+        {/* Max thumb */}
         <div
-          className={`absolute w-5 h-5 rounded-full border-2 border-primary bg-background shadow-sm cursor-grab -translate-x-1/2 transition-shadow ${
+          className={cn(
+            "absolute w-5 h-5 rounded-full border-2 border-primary bg-background shadow-sm cursor-grab -translate-x-1/2 transition-shadow",
             dragging === "max"
-              ? "ring-2 ring-primary/30 cursor-grabbing scale-110"
-              : "hover:ring-2 hover:ring-primary/20"
-          }`}
+              ? "ring-2 ring-ring/30 cursor-grabbing scale-110"
+              : "hover:ring-2 hover:ring-ring/20",
+          )}
           style={{ left: `${maxPercent}%` }}
           onPointerDown={handlePointerDown("max")}
           role="slider"
@@ -198,11 +212,10 @@ export default function PriceFilter({
         />
       </div>
 
+      {/* Price Inputs */}
       <div className="flex items-center gap-3 mt-4">
-        <div className="flex-1 flex items-center rounded-lg border border-border bg-muted/50 px-3 py-2 focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary transition-all">
-          <span className="text-muted-foreground text-sm mr-1.5">
-            {currency}
-          </span>
+        <div className="flex-1 flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 transition-all">
+          <span className="text-muted-foreground mr-1.5">{currency}</span>
           <input
             type="text"
             inputMode="numeric"
@@ -210,14 +223,12 @@ export default function PriceFilter({
             onChange={(e) => setMinInput(e.target.value)}
             onBlur={handleMinBlur}
             aria-label="Min price"
-            className="w-full bg-transparent text-sm text-foreground outline-none"
+            className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
         </div>
         <div className="w-4 h-[1.5px] bg-border rounded-full shrink-0" />
-        <div className="flex-1 flex items-center rounded-lg border border-border bg-muted/50 px-3 py-2 focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary transition-all">
-          <span className="text-muted-foreground text-sm mr-1.5">
-            {currency}
-          </span>
+        <div className="flex-1 flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 transition-all">
+          <span className="text-muted-foreground mr-1.5">{currency}</span>
           <input
             type="text"
             inputMode="numeric"
@@ -225,7 +236,7 @@ export default function PriceFilter({
             onChange={(e) => setMaxInput(e.target.value)}
             onBlur={handleMaxBlur}
             aria-label="Max price"
-            className="w-full bg-transparent text-sm text-foreground outline-none"
+            className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
         </div>
       </div>

@@ -3,111 +3,104 @@ export default function InstallPage() {
     <div className="max-w-3xl">
       <h1 className="text-3xl font-bold tracking-tight mb-2">Installation</h1>
       <p className="text-muted-foreground mb-8">
-        How to install and configure ssc in your project.
+        Add components to your existing shadcn/ui project.
       </p>
 
       <div className="space-y-8">
         <section>
           <h2 className="text-xl font-semibold mb-3">Prerequisites</h2>
           <p className="text-sm text-muted-foreground mb-4">
-            Your project should have React, TypeScript, and Tailwind CSS
-            configured.
+            Your project should already have{" "}
+            <strong>shadcn/ui</strong> set up with React, TypeScript, and
+            Tailwind CSS. These components use the same CSS variables,{" "}
+            <code className="text-xs bg-muted px-1.5 py-0.5 rounded">cn()</code>{" "}
+            utility, and conventions as shadcn/ui.
           </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-3">1. Initialize</h2>
+          <h2 className="text-xl font-semibold mb-3">Add a component</h2>
           <p className="text-sm text-muted-foreground mb-3">
-            Run the init command to set up the required utilities:
-          </p>
-          <div className="code-block">
-            <code>npx ssc init</code>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-3">
-            2. Install dependencies
-          </h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Install the base dependencies:
-          </p>
-          <div className="code-block">
-            <code>npm install clsx tailwind-merge</code>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-3">
-            3. Configure Tailwind CSS
-          </h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Add the shadcn-compatible CSS variables to your global CSS:
-          </p>
-          <div className="code-block">
-            <pre>
-              <code>{`@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --border: 240 5.9% 90%;
-    --ring: 221 83% 53%;
-  }
-}`}</code>
-            </pre>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-3">
-            4. Configure Tailwind theme
-          </h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Extend your Tailwind config with the CSS variable colors:
-          </p>
-          <div className="code-block">
-            <pre>
-              <code>{`// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-    },
-  },
-}`}</code>
-            </pre>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-3">5. Add components</h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Now you can add components to your project:
+            Use the CLI to add components directly to your project:
           </p>
           <div className="code-block">
             <code>npx ssc add price-filter</code>
+          </div>
+          <p className="text-sm text-muted-foreground mt-3">
+            This will create the component file at{" "}
+            <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+              src/components/ui/price-filter.tsx
+            </code>
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-3">List available components</h2>
+          <div className="code-block">
+            <code>npx ssc list</code>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-3">How it works</h2>
+          <p className="text-sm text-muted-foreground mb-3">
+            Just like shadcn/ui, components are copied into your project as
+            source code. You own the code and can customize it freely.
+          </p>
+          <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
+            <li>
+              Uses the same{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                @/lib/utils
+              </code>{" "}
+              and{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">cn()</code>{" "}
+              helper from shadcn/ui
+            </li>
+            <li>
+              Uses the same CSS variable color system ({" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                --primary
+              </code>
+              ,{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                --border
+              </code>
+              , etc.)
+            </li>
+            <li>Components are fully typed with TypeScript</li>
+            <li>
+              Supports{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                "use client"
+              </code>{" "}
+              for Next.js App Router
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-3">Usage example</h2>
+          <div className="code-block">
+            <pre>
+              <code>{`import { PriceFilter } from "@/components/ui/price-filter"
+
+export function Filters() {
+  const [range, setRange] = useState({ min: 100, max: 500 })
+
+  return (
+    <PriceFilter
+      min={0}
+      max={1000}
+      defaultMin={100}
+      defaultMax={500}
+      currency="$"
+      title="Price Range"
+      onChange={setRange}
+    />
+  )
+}`}</code>
+            </pre>
           </div>
         </section>
       </div>

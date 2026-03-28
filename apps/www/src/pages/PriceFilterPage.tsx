@@ -48,7 +48,7 @@ export default function PriceFilterPage() {
         <h2 className="text-xl font-semibold mb-3">Usage</h2>
         <div className="code-block">
           <pre>
-            <code>{`import PriceFilter from "@/components/ui/price-filter"
+            <code>{`import { PriceFilter } from "@/components/ui/price-filter"
 
 export function MyComponent() {
   const [range, setRange] = useState({ min: 100, max: 500 })
