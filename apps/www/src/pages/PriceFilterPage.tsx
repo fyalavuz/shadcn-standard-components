@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PriceFilter from "../registry-demos/PriceFilter";
+import { PriceFilter } from "../registry-demos/PriceFilter";
 
 export default function PriceFilterPage() {
   const [range, setRange] = useState({ min: 100, max: 500 });

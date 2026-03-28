@@ -1,49 +1,56 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { PriceFilter } from "../../../../registry/ui/price-filter";
+import { PriceFilter } from "../registry-demos/PriceFilter";
 import {
   AppShell,
   AppShellHeader,
   AppShellSidebar,
   AppShellContent,
   AppShellFooter,
-  useAppShell,
   NavGroup,
   NavItem,
-} from "../../../../registry/ui/app-shell";
+} from "../registry-demos/AppShell";
 
 // --- AppShell inline demo ---
 
-function SidebarToggle() {
-  const { toggleSidebar } = useAppShell();
-  return (
-    <button
-      onClick={toggleSidebar}
-      className="p-1.5 rounded-md hover:bg-accent/50 transition-colors"
-      aria-label="Toggle sidebar"
-    >
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-      </svg>
-    </button>
-  );
-}
-
 function AppShellDemo() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="rounded-lg border border-border overflow-hidden h-[350px]">
+    <div className="rounded-lg border border-border overflow-hidden h-[350px] relative">
       <AppShell className="h-full min-h-0">
-        <AppShellHeader className="border-b border-border bg-card">
-          <div className="flex items-center h-10 px-3 gap-2">
-            <SidebarToggle />
+        <AppShellHeader
+          behavior="fixed"
+          theme="dark"
+          logo={
             <span className="text-sm font-semibold">My App</span>
-            <span className="ml-auto text-xs text-muted-foreground">header</span>
-          </div>
-        </AppShellHeader>
+          }
+          nav={
+            <div className="flex items-center gap-3 text-xs">
+              <span className="opacity-70 hover:opacity-100 cursor-pointer">Home</span>
+              <span className="opacity-70 hover:opacity-100 cursor-pointer">Projects</span>
+            </div>
+          }
+          actions={
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-1.5 rounded-md hover:bg-accent/50 transition-colors md:hidden"
+              aria-label="Toggle sidebar"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+          }
+        />
         <div className="flex flex-1 min-h-0 overflow-hidden">
-          <AppShellSidebar width="180px" className="text-xs">
-            <div className="p-3">
-              <NavGroup label="Menu" defaultOpen>
+          <AppShellSidebar
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            side="left"
+          >
+            <div className="p-3 text-xs">
+              <NavGroup title="Menu" defaultOpen>
                 <NavItem label="Dashboard" active />
                 <NavItem label="Projects" />
                 <NavItem label="Settings" />
@@ -51,7 +58,7 @@ function AppShellDemo() {
             </div>
           </AppShellSidebar>
           <AppShellContent className="p-4 text-sm text-muted-foreground overflow-auto">
-            <p>Main content area. Sidebar toggles on mobile with GSAP animation.</p>
+            <p>Main content area. Sidebar is a drawer on mobile with GSAP animation.</p>
           </AppShellContent>
         </div>
         <AppShellFooter className="px-3 py-1.5 text-xs text-muted-foreground">
@@ -108,10 +115,7 @@ export default function ComponentsPage() {
           <div className="flex-1 rounded-md bg-muted px-3 py-1.5">
             <code className="text-xs text-muted-foreground">npx ssc add app-shell</code>
           </div>
-          <Link
-            to="/docs/components/app-shell"
-            className="text-xs text-primary hover:underline shrink-0"
-          >
+          <Link to="/docs/components/app-shell" className="text-xs text-primary hover:underline shrink-0">
             View docs →
           </Link>
         </div>
@@ -131,10 +135,7 @@ export default function ComponentsPage() {
           <div className="flex-1 rounded-md bg-muted px-3 py-1.5">
             <code className="text-xs text-muted-foreground">npx ssc add price-filter</code>
           </div>
-          <Link
-            to="/docs/components/price-filter"
-            className="text-xs text-primary hover:underline shrink-0"
-          >
+          <Link to="/docs/components/price-filter" className="text-xs text-primary hover:underline shrink-0">
             View docs →
           </Link>
         </div>
