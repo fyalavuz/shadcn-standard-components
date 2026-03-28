@@ -179,7 +179,7 @@ function AppShellProvider({ children }: { children: ReactNode }) {
       setHeaderVisible,
       setFooterVisible,
     }),
-    [headerVisible, footerVisible, scrollDirection]
+    [headerVisible, footerVisible, scrollDirection],
   );
 
   return (
@@ -285,6 +285,58 @@ const SafeArea = memo(function SafeArea({
 });
 
 // ============================================================================
+// useSafeArea hook
+// ============================================================================
+
+export interface SafeAreaInsets {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}
+
+export function useSafeArea(
+  edges: SafeAreaEdge[] = ["top", "bottom", "left", "right"],
+): SafeAreaInsets {
+  const [insets, setInsets] = useState<SafeAreaInsets>({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  });
+
+  useEffect(() => {
+    const measure = () => {
+      const style = getComputedStyle(document.documentElement);
+      const read = (prop: string, envProp: string) =>
+        parseFloat(style.getPropertyValue(prop) || "0") ||
+        parseFloat(style.getPropertyValue(envProp) || "0");
+
+      setInsets({
+        top: edges.includes("top")
+          ? read("--sa-top", "env(safe-area-inset-top)")
+          : 0,
+        bottom: edges.includes("bottom")
+          ? read("--sa-bottom", "env(safe-area-inset-bottom)")
+          : 0,
+        left: edges.includes("left")
+          ? read("--sa-left", "env(safe-area-inset-left)")
+          : 0,
+        right: edges.includes("right")
+          ? read("--sa-right", "env(safe-area-inset-right)")
+          : 0,
+      });
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [edges]);
+
+  return insets;
+}
+
+// ============================================================================
 // AppShellHeader (GSAP-based, all behaviors)
 // ============================================================================
 
@@ -361,7 +413,7 @@ export const AppShellHeader = memo(function AppShellHeader({
       const height = el.offsetHeight;
       document.documentElement.style.setProperty(
         "--header-height",
-        `${height}px`
+        `${height}px`,
       );
     };
 
@@ -414,11 +466,7 @@ export const AppShellHeader = memo(function AppShellHeader({
   const [isPastThreshold, setIsPastThreshold] = useState(false);
 
   useEffect(() => {
-    if (
-      behavior === "static" ||
-      behavior === "fixed" ||
-      behavior === "sticky"
-    )
+    if (behavior === "static" || behavior === "fixed" || behavior === "sticky")
       return;
 
     const onScroll = () => {
@@ -438,7 +486,7 @@ export const AppShellHeader = memo(function AppShellHeader({
       behavior === "fixed" ||
         behavior === "sticky" ||
         !hasRevealEffect ||
-        isOverlayVisible
+        isOverlayVisible,
     );
   }, [isOverlayVisible, behavior, hasRevealEffect, onVisibilityChange]);
 
@@ -462,7 +510,7 @@ export const AppShellHeader = memo(function AppShellHeader({
           opacity: 1,
           duration,
           ease: "power3.out",
-        }
+        },
       );
     } else if (overlayMounted) {
       gsap.to(el, {
@@ -495,7 +543,7 @@ export const AppShellHeader = memo(function AppShellHeader({
           opacity: 1,
           duration,
           ease: "power3.out",
-        }
+        },
       );
     } else if (mobileMenuMounted) {
       gsap.to(el, {
@@ -531,7 +579,7 @@ export const AppShellHeader = memo(function AppShellHeader({
         return true;
       return false;
     },
-    [behavior]
+    [behavior],
   );
 
   const toggleMobile = useCallback(() => setMobileOpen((o) => !o), []);
@@ -574,7 +622,7 @@ export const AppShellHeader = memo(function AppShellHeader({
       className={cn(
         "w-full border-b backdrop-blur-xl",
         t.nav,
-        isSticky && "sticky top-0 z-40"
+        isSticky && "sticky top-0 z-40",
       )}
     >
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center px-4 sm:px-6">
@@ -592,9 +640,7 @@ export const AppShellHeader = memo(function AppShellHeader({
             )}
             {logo}
           </div>
-          {nav && (
-            <div className="hidden md:flex items-center ml-4">{nav}</div>
-          )}
+          {nav && <div className="hidden md:flex items-center ml-4">{nav}</div>}
         </div>
         <div className="flex items-center gap-2">{actions}</div>
       </div>
@@ -607,7 +653,7 @@ export const AppShellHeader = memo(function AppShellHeader({
         data-header-context
         className={cn(
           "w-full border-b backdrop-blur-xl relative z-30",
-          t.context
+          t.context,
         )}
       >
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 flex flex-col justify-center py-4">
@@ -627,7 +673,7 @@ export const AppShellHeader = memo(function AppShellHeader({
         data-header-search
         className={cn(
           "w-full border-b backdrop-blur-sm relative z-20",
-          t.search
+          t.search,
         )}
       >
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-2">
@@ -652,9 +698,7 @@ export const AppShellHeader = memo(function AppShellHeader({
   const renderContent = () => (
     <HeaderProvider value={{ theme }}>
       {renderNavRow(
-        behavior !== "static" &&
-          behavior !== "fixed" &&
-          behavior !== "sticky"
+        behavior !== "static" && behavior !== "fixed" && behavior !== "sticky",
       )}
       {renderContextRow()}
       {renderSearchRow()}
@@ -671,7 +715,7 @@ export const AppShellHeader = memo(function AppShellHeader({
         className={cn(
           "w-full sticky top-0 z-50 will-change-transform",
           t.wrapper,
-          className
+          className,
         )}
         style={{
           paddingTop: "var(--sa-top, env(safe-area-inset-top, 0px))",
@@ -707,7 +751,7 @@ export const AppShellHeader = memo(function AppShellHeader({
           aria-hidden
           className={cn(
             "fixed top-0 left-0 right-0 z-[60] shadow-lg will-change-transform",
-            t.wrapper
+            t.wrapper,
           )}
           style={{
             paddingTop: "var(--sa-top, env(safe-area-inset-top, 0px))",
@@ -782,7 +826,7 @@ export const AppShellSidebar = memo(function AppShellSidebar({
       gsap.fromTo(
         panel,
         { x: isLeft ? "-100%" : "100%" },
-        { x: "0%", duration: 0.25, ease: "power3.out" }
+        { x: "0%", duration: 0.25, ease: "power3.out" },
       );
     } else if (mounted) {
       gsap.to(panel, {
@@ -820,7 +864,7 @@ export const AppShellSidebar = memo(function AppShellSidebar({
         className={cn(
           "fixed top-0 z-[71] h-full w-80 max-w-[85vw] overflow-y-auto bg-background shadow-2xl will-change-transform",
           isLeft ? "left-0" : "right-0",
-          className
+          className,
         )}
         style={{ transform: isLeft ? "translateX(-100%)" : "translateX(100%)" }}
       >
@@ -860,10 +904,8 @@ export const FooterItem = memo(function FooterItem({
       data-active={active || undefined}
       className={cn(
         "flex flex-1 flex-col items-center justify-center gap-0.5 py-1 transition-colors relative",
-        active
-          ? "text-primary"
-          : "text-muted-foreground hover:text-foreground",
-        className
+        active ? "text-primary" : "text-muted-foreground hover:text-foreground",
+        className,
       )}
     >
       <span className="relative">
@@ -934,7 +976,7 @@ export const AppShellFooter = memo(function AppShellFooter({
           opacity: 1,
           duration,
           ease: "power3.out",
-        }
+        },
       );
     }
   }, [shouldHide, mounted, variant, duration, behavior]);
@@ -955,14 +997,16 @@ export const AppShellFooter = memo(function AppShellFooter({
         className={cn(
           "fixed bottom-0 left-0 right-0 z-50 flex pointer-events-none",
           positionClass,
-          className
+          className,
         )}
         style={{
-          paddingBottom:
-            "var(--sa-bottom, env(safe-area-inset-bottom, 0px))",
+          paddingBottom: "var(--sa-bottom, env(safe-area-inset-bottom, 0px))",
         }}
       >
-        <div ref={innerRef} className="pointer-events-auto will-change-transform">
+        <div
+          ref={innerRef}
+          className="pointer-events-auto will-change-transform"
+        >
           {children}
         </div>
       </div>
@@ -975,11 +1019,10 @@ export const AppShellFooter = memo(function AppShellFooter({
         ref={footerRef as React.RefObject<HTMLElement>}
         className={cn(
           "fixed bottom-0 left-0 right-0 z-50 min-h-12 border-t bg-background/95 backdrop-blur-xl will-change-transform",
-          className
+          className,
         )}
         style={{
-          paddingBottom:
-            "var(--sa-bottom, env(safe-area-inset-bottom, 0px))",
+          paddingBottom: "var(--sa-bottom, env(safe-area-inset-bottom, 0px))",
         }}
       >
         <div className="mx-auto flex h-12 max-w-7xl items-center px-4">
@@ -995,11 +1038,10 @@ export const AppShellFooter = memo(function AppShellFooter({
       ref={footerRef as React.RefObject<HTMLElement>}
       className={cn(
         "fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-xl will-change-transform",
-        className
+        className,
       )}
       style={{
-        paddingBottom:
-          "var(--sa-bottom, env(safe-area-inset-bottom, 0px))",
+        paddingBottom: "var(--sa-bottom, env(safe-area-inset-bottom, 0px))",
       }}
     >
       <div className="mx-auto flex max-w-lg items-stretch">{children}</div>
@@ -1049,7 +1091,7 @@ export const NavGroup = memo(function NavGroup({
         <span
           className={cn(
             "shrink-0 transition-transform duration-200",
-            open && "rotate-180"
+            open && "rotate-180",
           )}
         >
           <ChevronIcon />
@@ -1059,7 +1101,7 @@ export const NavGroup = memo(function NavGroup({
       <div
         className={cn(
           "transition-[max-height] duration-200 ease-out overflow-hidden",
-          open ? "max-h-[500px]" : "max-h-0"
+          open ? "max-h-[500px]" : "max-h-0",
         )}
       >
         <div className="pl-4 py-1">{children}</div>
@@ -1086,7 +1128,7 @@ export const NavItem = memo(function NavItem({
     active
       ? "bg-accent text-accent-foreground"
       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-    className
+    className,
   );
 
   const content = (
@@ -1232,7 +1274,7 @@ export const HeaderNavItem = memo(function HeaderNavItem({
   const baseClasses = cn(
     "inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
     getThemeClasses(),
-    className
+    className,
   );
 
   const commonProps = {
@@ -1278,7 +1320,7 @@ export const HeaderNavItem = memo(function HeaderNavItem({
         <svg
           className={cn(
             "size-4 transition-transform duration-200",
-            open && "rotate-180"
+            open && "rotate-180",
           )}
           fill="none"
           viewBox="0 0 24 24"
@@ -1317,7 +1359,7 @@ export const ScrollNav = memo(function ScrollNav({
     <div
       className={cn(
         "flex items-center gap-1.5 overflow-x-auto scrollbar-hide",
-        className
+        className,
       )}
     >
       {children}
@@ -1341,7 +1383,7 @@ export const ScrollNavItem = memo(function ScrollNavItem({
         active
           ? "bg-foreground text-background shadow-sm"
           : "text-muted-foreground hover:text-foreground hover:bg-muted",
-        className
+        className,
       )}
     >
       {label}
