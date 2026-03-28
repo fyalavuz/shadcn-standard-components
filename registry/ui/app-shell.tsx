@@ -194,7 +194,9 @@ export function AppShellSidebar({
       gsap.to(backdrop, {
         opacity: 0,
         duration: 0.25,
-        onComplete: () => gsap.set(backdrop, { display: "none" }),
+        onComplete: () => {
+          gsap.set(backdrop, { display: "none" });
+        },
       });
     }
   }, [sidebarOpen, isLeft]);
@@ -256,9 +258,7 @@ interface AppShellFooterProps {
 
 export function AppShellFooter({ children, className }: AppShellFooterProps) {
   return (
-    <footer
-      className={cn("border-t border-border bg-background", className)}
-    >
+    <footer className={cn("border-t border-border bg-background", className)}>
       {children}
     </footer>
   );
