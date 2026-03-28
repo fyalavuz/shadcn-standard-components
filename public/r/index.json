@@ -1,0 +1,9 @@
+[
+  {
+    "name": "price-filter",
+    "type": "registry:ui",
+    "description": "A dual range price filter with histogram distribution chart, slider thumbs, and currency input fields.",
+    "dependencies": [],
+    "registryDependencies": []
+  }
+]

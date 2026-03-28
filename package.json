@@ -1,0 +1,15 @@
+{
+  "name": "ssc-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/www",
+    "build": "node scripts/build-registry.mjs && npm run build --workspace=apps/www",
+    "build:registry": "node scripts/build-registry.mjs",
+    "build:www": "npm run build --workspace=apps/www",
+    "preview": "npm run preview --workspace=apps/www"
+  }
+}
