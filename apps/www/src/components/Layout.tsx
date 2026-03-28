@@ -1,4 +1,52 @@
+import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+
+// --- Theme Color Switcher ---
+
+const colorPresets = [
+  { name: "blue", primary: "217 91% 60%", ring: "217 91% 60%" },
+  { name: "green", primary: "142 71% 45%", ring: "142 71% 45%" },
+  { name: "violet", primary: "263 70% 50%", ring: "263 70% 50%" },
+  { name: "orange", primary: "25 95% 53%", ring: "25 95% 53%" },
+  { name: "rose", primary: "347 77% 50%", ring: "347 77% 50%" },
+] as const;
+
+const presetColors: Record<string, string> = {
+  blue: "bg-blue-500",
+  green: "bg-green-500",
+  violet: "bg-violet-500",
+  orange: "bg-orange-500",
+  rose: "bg-rose-500",
+};
+
+function ThemeSwitcher() {
+  const [active, setActive] = useState("blue");
+
+  const applyTheme = (preset: (typeof colorPresets)[number]) => {
+    const root = document.documentElement;
+    root.style.setProperty("--primary", preset.primary);
+    root.style.setProperty("--ring", preset.ring);
+    setActive(preset.name);
+  };
+
+  return (
+    <div className="flex items-center gap-1.5">
+      {colorPresets.map((preset) => (
+        <button
+          key={preset.name}
+          onClick={() => applyTheme(preset)}
+          title={preset.name}
+          className={`w-5 h-5 rounded-full transition-all ${presetColors[preset.name]} ${
+            active === preset.name
+              ? "ring-2 ring-offset-2 ring-offset-background ring-foreground scale-110"
+              : "opacity-70 hover:opacity-100"
+          }`}
+          aria-label={`Switch to ${preset.name} theme`}
+        />
+      ))}
+    </div>
+  );
+}
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -16,7 +64,10 @@ const sidebarItems = [
   },
   {
     title: "Components",
-    items: [{ label: "Price Filter", path: "/docs/components/price-filter" }],
+    items: [
+      { label: "App Shell", path: "/docs/components/app-shell" },
+      { label: "Price Filter", path: "/docs/components/price-filter" },
+    ],
   },
 ];
 
@@ -51,6 +102,7 @@ export default function Layout() {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-4">
+            <ThemeSwitcher />
             <a
               href="https://github.com/fyalavuz/shadcn-standard-components"
               target="_blank"

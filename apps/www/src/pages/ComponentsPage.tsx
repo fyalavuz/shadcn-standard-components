@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 
 const components = [
   {
+    name: "App Shell",
+    description:
+      "A responsive application shell with header, collapsible sidebar, content area, and footer. Uses GSAP for smooth animations.",
+    path: "/docs/components/app-shell",
+    category: "Layout",
+  },
+  {
     name: "Price Filter",
     description:
       "A dual range price filter with histogram distribution chart, slider thumbs, and currency input fields.",
@@ -34,7 +41,9 @@ export default function ComponentsPage() {
                   {comp.category}
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground">{comp.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {comp.description}
+              </p>
             </div>
             <svg
               className="w-4 h-4 text-muted-foreground group-hover:text-foreground mt-1 shrink-0"
@@ -43,7 +52,11 @@ export default function ComponentsPage() {
               stroke="currentColor"
               strokeWidth={2}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </Link>
         ))}

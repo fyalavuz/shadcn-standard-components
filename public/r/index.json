@@ -1,5 +1,14 @@
 [
   {
+    "name": "app-shell",
+    "type": "registry:ui",
+    "description": "A responsive application shell with header, collapsible sidebar, content area, and footer. Uses GSAP for smooth animations.",
+    "dependencies": [
+      "gsap"
+    ],
+    "registryDependencies": []
+  },
+  {
     "name": "price-filter",
     "type": "registry:ui",
     "description": "A dual range price filter with histogram distribution chart, slider thumbs, and currency input fields.",

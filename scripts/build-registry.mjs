@@ -7,6 +7,21 @@ const ROOT = resolve(__dirname, "..");
 
 const components = [
   {
+    name: "app-shell",
+    type: "registry:ui",
+    description: "A responsive application shell with header, collapsible sidebar, content area, and footer. Uses GSAP for smooth animations.",
+    dependencies: ["gsap"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "ui/app-shell.tsx",
+        type: "registry:ui",
+        target: "components/ui/app-shell.tsx",
+      },
+    ],
+  },
+  {
     name: "price-filter",
     type: "registry:ui",
     description: "A dual range price filter with histogram distribution chart, slider thumbs, and currency input fields.",

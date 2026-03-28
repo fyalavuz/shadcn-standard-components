@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import InstallPage from "./pages/InstallPage";
 import ComponentsPage from "./pages/ComponentsPage";
 import PriceFilterPage from "./pages/PriceFilterPage";
+import AppShellPage from "./pages/AppShellPage";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -16,9 +17,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<HomePage />} />
           <Route path="/docs/installation" element={<InstallPage />} />
           <Route path="/docs/components" element={<ComponentsPage />} />
-          <Route path="/docs/components/price-filter" element={<PriceFilterPage />} />
+          <Route
+            path="/docs/components/price-filter"
+            element={<PriceFilterPage />}
+          />
+          <Route path="/docs/components/app-shell" element={<AppShellPage />} />
         </Route>
       </Routes>
     </HashRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
